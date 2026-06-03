@@ -27,11 +27,20 @@ ps aux --sort=-%mem | head -6 >> $REPORT
 
 echo "" >> $REPORT
 echo "===== Failed Login Attempts =====" >> $REPORT
-grep "Failed password" /var/log/secure | tail -10 >> $REPORT
-
+#grep "Failed password" /var/log/secure | tail -10 >> $REPORT
+if [ -f /var/log/secure ]; then
+    grep "Failed password" /var/log/secure | tail -10 >> $REPORT
+else
+    echo "/var/log/secure not found" >> $REPORT
+fi
 echo "" >> $REPORT
 echo "===== Recent Errors =====" >> $REPORT
-grep -iE "error|failed|critical|warning" /var/log/messages | tail -20 >> $REPORT
+#grep -iE "error|failed|critical|warning" /var/log/messages | tail -20 >> $REPORT
+if [ -f /var/log/messages ]; then
+    grep -iE "error|failed|critical|warning" /var/log/messages | tail -20 >> $REPORT
+else
+    echo "/var/log/messages not found" >> $REPORT
+fi
 
 echo ""
 echo "Report generated successfully"
